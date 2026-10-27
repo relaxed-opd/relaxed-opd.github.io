@@ -1,0 +1,14 @@
+{
+  "name": "relaxed-opd.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The REOPOLD NeurIPS 2026 research project page.",
+  "scripts": {
+    "preview": "python3 -m http.server 4173 --bind 127.0.0.1",
+    "test": "playwright test",
+    "check": "node --check assets/site.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "sample-efficiency": {
+    "pdf_page": 2,
+    "inspection_crop": [
+      163,
+      108,
+      415,
+      256
+    ],
+    "width": 882,
+    "height": 518
+  },
+  "test-time-scaling": {
+    "pdf_page": 2,
+    "inspection_crop": [
+      418,
+      108,
+      765,
+      256
+    ],
+    "width": 1214,
+    "height": 518
+  },
+  "credit-distribution": {
+    "pdf_page": 3,
+    "inspection_crop": [
+      164,
+      110,
+      514,
+      246
+    ],
+    "width": 1224,
+    "height": 476
+  },
+  "entropy-credit": {
+    "pdf_page": 4,
+    "inspection_crop": [
+      164,
+      109,
+      461,
+      228
+    ],
+    "width": 1039,
+    "height": 416
+  },
+  "training-schedule": {
+    "pdf_page": 4,
+    "inspection_crop": [
+      470,
+      109,
+      766,
+      228
+    ],
+    "width": 1035,
+    "height": 416
+  },
+  "long-training": {
+    "pdf_page": 9,
+    "inspection_crop": [
+      164,
+      108,
+      438,
+      266
+    ],
+    "width": 958,
+    "height": 553
+  },
+  "opd-comparison": {
+    "pdf_page": 9,
+    "inspection_crop": [
+      164,
+      331,
+      461,
+      552
+    ],
+    "width": 1039,
+    "height": 774
+  },
+  "qwen3-vl": {
+    "pdf_page": 9,
+    "inspection_crop": [
+      470,
+      331,
+      765,
+      552
+    ],
+    "width": 1032,
+    "height": 774
+  }
+}

@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11695d">
+  <meta name="description" content="REOPOLD: Relaxed On-Policy Distillation. Selective teacher credit improves the stability, sample efficiency, and test-time scaling of reasoning distillation. NeurIPS 2026.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://relaxed-opd.github.io/">
+  <meta property="og:title" content="REOPOLD | Relaxed On-Policy Distillation">
+  <meta property="og:description" content="Scaling Reasoning Efficiently via Relaxed On-Policy Distillation. NeurIPS 2026.">
+  <meta property="og:image" content="https://relaxed-opd.github.io/assets/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="REOPOLD: Scaling Reasoning Efficiently via Relaxed On-Policy Distillation. NeurIPS 2026.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="citation_title" content="Scaling Reasoning Efficiently via Relaxed On-Policy Distillation">
+  <meta name="citation_author" content="Jongwoo Ko">
+  <meta name="citation_author" content="Sara Abdali">
+  <meta name="citation_author" content="Young Jin Kim">
+  <meta name="citation_author" content="Tianyi Chen">
+  <meta name="citation_author" content="Pashmina Cameron">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Advances in Neural Information Processing Systems">
+  <meta name="citation_pdf_url" content="https://relaxed-opd.github.io/assets/paper/reopold.pdf">
+  <link rel="canonical" href="https://relaxed-opd.github.io/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <title>REOPOLD | Scaling Reasoning Efficiently via Relaxed On-Policy Distillation</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a href="#top" class="brand" aria-label="REOPOLD home"><img src="assets/favicon.svg" width="29" height="29" alt=""><span>REOPOLD</span></a>
+      <div class="nav-links">
+        <a href="#motivation">Motivation</a>
+        <a href="#method">Method</a>
+        <a href="#results">Results</a>
+        <a href="#citation">Citation</a>
+      </div>
+      <a class="nav-paper" href="https://arxiv.org/abs/2603.11137" target="_blank" rel="noopener">Read paper <span aria-hidden="true">&#8599;</span></a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero container" id="top" aria-labelledby="paper-title">
+      <h1 id="paper-title">Scaling Reasoning Efficiently via<br class="desktop-break"> <span>Relaxed On-Policy Distillation</span></h1>
+      <p class="hero-acronym"><strong>REOPOLD</strong> &nbsp; <span class="acronym-word"><b>Re</b>laxed <b>O</b>n-<b>Pol</b>icy <b>D</b>istillation</span></p>
+      <p class="authors">Jongwoo Ko<span>·</span> Sara Abdali<span>·</span> Young Jin Kim<span>·</span> Tianyi Chen<span>·</span> Pashmina Cameron</p>
+      <p class="affiliation">Microsoft</p>
+      <div class="resource-links" aria-label="Paper resources">
+        <a class="button button-primary" href="https://openreview.net/forum?id=l0h1SzRI7H#discussion" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6M9 16h6"/></svg>OpenReview</a>
+        <a class="button button-outline" href="https://arxiv.org/abs/2603.11137" target="_blank" rel="noopener"><span class="arxiv-icon" aria-hidden="true">&#9671;</span> arXiv <span aria-hidden="true">&#8599;</span></a>
+        <span class="button button-unavailable"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5m-3-13-2 16"/></svg>Code <span class="button-detail">coming soon</span></span>
+      </div>
+      <div class="tldr">
+        <span class="tldr-label">TL;DR</span>
+        <p>Not every teacher signal deserves the same update. <strong>REOPOLD selects uncertain tokens, bounds extreme negative credit, and shifts from exploration to refinement</strong> to make on-policy reasoning distillation more stable and sample-efficient.</p>
+      </div>
+    </section>
+
+    <section class="highlights container" aria-label="Key results">
+      <div class="stat"><span class="stat-number">12<span>&times;</span></span><div><h2>Training sample efficiency</h2><p>Up to 12&times; fewer generated sequences<br>vs. reported RL baselines on AIME-25.</p></div></div>
+      <div class="stat"><span class="stat-number">3.32<span>&times;</span></span><div><h2>Inference speedup</h2><p>7B student vs. 32B teacher<br>at comparable visual reasoning Pass@K.</p></div></div>
+      <div class="stat"><span class="stat-number">3</span><div><h2>Reasoning settings</h2><p>Mathematical reasoning, visual reasoning,<br>and agentic visual tool use.</p></div></div>
+    </section>
+
+    <section class="teaser container" aria-label="Training and inference efficiency">
+      <div class="teaser-heading"><span class="eyebrow">From training to inference</span><a class="text-link" href="assets/paper/reopold.pdf#page=2" target="_blank" rel="noopener">Figure 1 in the paper <span aria-hidden="true">&#8599;</span></a></div>
+      <div class="teaser-grid">
+        <figure>
+          <div class="figure-topline"><span class="figure-letter">a</span><h2>Fewer training sequences</h2></div>
+          <a class="figure-link" href="assets/figures/sample-efficiency.webp" data-zoom data-caption="Figure 1(a). AIME-25 accuracy versus normalized generated training sequences. Comparisons with published RL baselines use reported sequence budgets, not matched hardware or training recipes.">
+            <img src="assets/figures/sample-efficiency.webp" width="882" height="518" alt="AIME-25 sample-efficiency plot: REOPOLD uses fewer generated sequences than ProRL, DeepScaleR, and DeepMath at comparable accuracy." fetchpriority="high">
+          </a>
+          <figcaption>DeepSeek-R1-Distill-Qwen-1.5B on AIME-25. Budgets count <strong>steps &times; batch size &times; rollouts</strong>, not wall-clock training time.</figcaption>
+        </figure>
+        <figure>
+          <div class="figure-topline"><span class="figure-letter">b</span><h2>Stronger test-time scaling</h2></div>
+          <a class="figure-link" href="assets/figures/test-time-scaling.webp" data-zoom data-caption="Figure 1(b). Pass@K versus parallel generation latency on Geometry3K and MathVerse. The annotated speedups compare the 7B REOPOLD student with the 32B teacher, not with standard OPD.">
+            <img src="assets/figures/test-time-scaling.webp" width="1215" height="518" alt="Geometry3K and MathVerse Pass@K versus generation latency; compact REOPOLD students approach the 32B teacher with lower latency." fetchpriority="high">
+          </a>
+          <figcaption>Pass@K versus parallel generation latency. Speedups compare the <strong>7B REOPOLD student with the 32B teacher</strong>, not standard OPD.</figcaption>
+        </figure>
+      </div>
+      <p class="figure-hint">Click any figure to enlarge.</p>
+    </section>
+
+    <section class="section section-tinted" id="motivation" aria-labelledby="motivation-heading">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">01 / Motivation</span><h2 id="motivation-heading">Dense feedback is not uniformly useful.</h2><p>Sampled-token OPD learns from the teacher on the student's own trajectories. The bottleneck is how that feedback is allocated.</p></div>
+        <div class="motivation-grid">
+          <div class="motivation-copy">
+            <div class="credit-equation" aria-label="Token credit equals log teacher probability minus log student probability"><span class="math">R<sub>t</sub></span> = log <span class="math">π<sub>T</sub>(o<sub>t</sub> | q, o<sub>&lt;t</sub>)</span> &minus; log <span class="math">π<sub>θ</sub>(o<sub>t</sub> | q, o<sub>&lt;t</sub>)</span></div>
+            <h3>Most credits are near zero.</h3>
+            <p>Teacher and student often agree on predictable tokens. Uniform aggregation spends normalization mass on nearly inactive signals, diluting useful updates.</p>
+            <h3>A few negative credits dominate.</h3>
+            <p>When the teacher assigns very low probability to a sampled token, its log-ratio credit becomes strongly negative. These rare corrections can suppress plausible reasoning paths too early.</p>
+            <div class="diagnostic"><span class="diagnostic-number">&gt;95%</span><p>of the measured <strong>update-energy proxy</strong> comes from the bottom 1% of credits in early standard OPD training.<br><span>95.9% math · 97.8% visual &nbsp; / &nbsp; Table 1</span></p></div>
+          </div>
+          <figure class="paper-figure">
+            <a class="figure-link" href="assets/figures/credit-distribution.webp" data-zoom data-caption="Figure 2. Log-scale histograms of teacher-derived token credits for math and visual reasoning. A near-zero mass coexists with a heavy negative tail.">
+              <img src="assets/figures/credit-distribution.webp" width="1225" height="476" alt="Math and visual token-credit histograms with a large near-zero mass and a long negative tail." loading="lazy">
+            </a>
+            <figcaption><strong>The imbalance in teacher credit.</strong> A large near-zero mass and a heavy negative tail appear in both math and visual reasoning. Figure 2.</figcaption>
+            <div class="figure-note">The update-energy statistic is a logit-level diagnostic proxy, not a measurement of end-to-end compute or a guarantee about optimization.</div>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="method" aria-labelledby="method-heading">
+      <div class="section-heading"><span class="eyebrow">02 / Method</span><h2 id="method-heading">Selective credit allocation, in three controls.</h2><p>REOPOLD changes which teacher credits enter the update, their maximum negative magnitude, and the allocation rule over training.</p></div>
+      <div class="method-grid">
+        <article class="method-card"><div class="method-index"><span>01</span><span class="axis-label">Where</span></div><h3>Entropy-guided<br>token selection</h3><p>During refinement, select the top-β fraction of tokens by <strong>student entropy</strong>. Concentrate supervision on decisions the student has not resolved.</p><div class="method-formula">M<sub>t</sub> = 𝟙[H<sub>t</sub> &ge; τ<sub>β</sub>]</div><span class="method-reference">Section 3.1</span></article>
+        <article class="method-card"><div class="method-index"><span>02</span><span class="axis-label">How much</span></div><h3>Bounded negative<br>teacher credit</h3><p>Clip extreme negative log-ratios to a finite floor. Preserve ordinary token credits without letting outliers dominate the update.</p><div class="method-formula">R&#770;<sub>t</sub> = max(R<sub>t</sub>, <span class="fraction"><span>log λ</span><span>1 &minus; λ</span></span>)</div><span class="method-reference">Section 3.2 &nbsp; · &nbsp; 0 &lt; λ &lt; 1</span></article>
+        <article class="method-card"><div class="method-index"><span>03</span><span class="axis-label">When</span></div><h3>Exploration-to-refinement<br>scheduling</h3><p><strong>Early:</strong> reject excessively negative credits. <strong>Later:</strong> select high-entropy tokens and retain their corrections with bounded negative credit.</p><div class="method-formula schedule-formula"><span>Explore</span><span aria-hidden="true">&rarr;</span><span>Refine</span></div><span class="method-reference">Section 3.3</span></article>
+      </div>
+
+      <div class="allocation-demo" id="allocation-demo">
+        <div class="demo-heading"><div><span class="eyebrow">Interactive method illustration</span><h3>Which token credits enter the update?</h3></div><div class="phase-controls" role="group" aria-label="Training phase" hidden><button type="button" data-phase="exploration" aria-pressed="true">Exploration</button><button type="button" data-phase="refinement" aria-pressed="false">Refinement</button></div></div>
+        <p class="demo-explanation" id="phase-explanation">Early training rejects credits below the floor, while retaining ordinary credits regardless of entropy.</p>
+        <div class="demo-parameters"><span>λ = 0.1</span><span>Credit floor = &minus;2.56</span><span>Refinement selects top 50% entropy</span></div>
+        <div id="token-grid" class="token-grid"></div>
+        <noscript><p class="noscript-note">Enable JavaScript to switch between the two allocation rules. In exploration, credits below &minus;2.56 are rejected. In refinement, the four highest-entropy tokens are selected and their credits are floored at &minus;2.56.</p></noscript>
+        <div class="demo-footer"><div class="demo-legend"><span><i class="legend-square selected"></i>Selected</span><span><i class="legend-square excluded"></i>Excluded</span><span><i class="legend-square clipped"></i>Selected + clipped</span></div><output id="selection-summary" aria-live="polite"></output></div>
+        <p class="demo-disclaimer">Illustrative tokens, credits, and entropies; not an experimental trace. Teacher credits and masks are stop-gradient quantities. The objective is normalized over selected tokens.</p>
+      </div>
+
+      <div class="evidence-grid">
+        <figure class="paper-figure"><h3>Entropy identifies different credit regimes</h3><a class="figure-link" href="assets/figures/entropy-credit.webp" data-zoom data-caption="Figure 3. In the measured math and visual batches, low-entropy tokens mostly receive near-zero credit; larger teacher-student disagreements occur in higher-entropy regions."><img src="assets/figures/entropy-credit.webp" width="1040" height="416" alt="Scatter plots of student token entropy against teacher credit for mathematical and visual reasoning." loading="lazy"></a><figcaption>In these batches, credits below the 60th entropy percentile concentrate near zero. Entropy is an allocation signal, not a guarantee of useful credit. Figure 3.</figcaption></figure>
+        <figure class="paper-figure"><h3>The schedule preserves early exploration</h3><a class="figure-link" href="assets/figures/training-schedule.webp" data-zoom data-caption="Figure 4. Exploration-to-refinement scheduling compared with the variant without multi-stage scheduling. Entropy, Avg@32, and Pass@32 are shown over training."><img src="assets/figures/training-schedule.webp" width="1036" height="416" alt="Policy entropy and AIME-24 Avg@32 and Pass@32 training curves with and without multi-stage scheduling." loading="lazy"></a><figcaption>Staged allocation avoids the rapid entropy collapse seen in the comparison and improves both Avg@32 and Pass@32. Figure 4.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section section-tinted" id="results" aria-labelledby="results-heading">
+      <div class="container">
+        <div class="section-heading"><span class="eyebrow">03 / Results</span><h2 id="results-heading">One allocation strategy. Three reasoning settings.</h2><p>Improvements in average accuracy across mathematical reasoning, multimodal reasoning, and agentic visual tool use.</p></div>
+        <div class="result-tabs" role="tablist" aria-label="Reasoning setting" hidden>
+          <button id="tab-math" type="button" role="tab" aria-controls="panel-math" aria-selected="true" tabindex="0">Math reasoning <span>1.5B</span></button>
+          <button id="tab-visual" type="button" role="tab" aria-controls="panel-visual" aria-selected="false" tabindex="-1">Visual reasoning <span>3B / 7B</span></button>
+          <button id="tab-tools" type="button" role="tab" aria-controls="panel-tools" aria-selected="false" tabindex="-1">Visual tool use <span>3B</span></button>
+        </div>
+
+        <div id="panel-math" class="result-panel">
+          <div class="result-panel-heading"><div><h3>Mathematical reasoning</h3><p>SkyWork-OR1-Math-7B &rarr; DeepSeek-R1-Distill-Qwen-1.5B</p></div><div class="result-delta">+2.7 <span>points vs. standard OPD<br>six-benchmark average</span></div></div>
+          <div class="table-scroll" role="region" aria-label="Mathematical reasoning results, horizontally scrollable" tabindex="0"><table>
+            <caption>Table 3 · Accuracy (%) · All trained 1.5B students: 300 steps</caption>
+            <thead><tr><th scope="col">Method</th><th scope="col">AIME-24</th><th scope="col">AIME-25</th><th scope="col">AMC-23</th><th scope="col">MATH-500</th><th scope="col">Minerva</th><th scope="col">Olympiad</th><th scope="col">Average</th></tr></thead>
+            <tbody>
+              <tr class="reference-row"><th scope="row">Teacher · 7B</th><td>69.8</td><td>52.3</td><td>94.1</td><td>95.8</td><td>49.3</td><td>73.5</td><td>72.5</td></tr>
+              <tr><th scope="row">Base student</th><td>28.6</td><td>22.7</td><td>62.6</td><td>82.9</td><td>26.4</td><td>43.6</td><td>44.4</td></tr>
+              <tr><th scope="row">+ GRPO</th><td>31.8 <small>±1.0</small></td><td>23.7 <small>±0.9</small></td><td>62.0 <small>±1.1</small></td><td>85.4 <small>±0.6</small></td><td>33.8 <small>±0.3</small></td><td>49.8 <small>±0.6</small></td><td>47.8 <small>±0.3</small></td></tr>
+              <tr><th scope="row">+ SFT</th><td>33.5 <small>±1.5</small></td><td>24.6 <small>±1.9</small></td><td>76.1 <small>±1.2</small></td><td>86.6 <small>±0.8</small></td><td>36.4 <small>±0.8</small></td><td>55.6 <small>±0.8</small></td><td>51.5 <small>±0.9</small></td></tr>
+              <tr><th scope="row">+ Standard OPD</th><td>37.1 <small>±1.4</small></td><td>30.6 <small>±0.6</small></td><td>80.2 <small>±0.9</small></td><td>88.0 <small>±0.5</small></td><td>34.6 <small>±0.4</small></td><td>56.0 <small>±0.8</small></td><td>54.4 <small>±0.2</small></td></tr>
+              <tr class="ours"><th scope="row">+ REOPOLD</th><td>41.6 <small>±1.1</small></td><td>32.6 <small>±0.4</small></td><td>83.0 <small>±1.2</small></td><td>89.2 <small>±0.4</small></td><td>38.6 <small>±0.7</small></td><td>57.3 <small>±0.5</small></td><td>57.1 <small>±0.3</small></td></tr>
+            </tbody>
+          </table></div>
+          <p class="table-note">AIME-24, AIME-25, and AMC-23: Avg@32. Other benchmarks: Pass@1. Trained-student results report mean ± standard deviation over five runs, as reported in the paper. Temperature 0.6; top-p 0.95.</p>
+        </div>
+
+        <div id="panel-visual" class="result-panel">
+          <div class="result-panel-heading"><div><h3>Visual reasoning &amp; perception</h3><p>Qwen2.5-VL-32B-Instruct + NoisyRollout &rarr; Qwen2.5-VL-3B / 7B-Instruct</p></div><div class="result-delta">+3.19 <span>points vs. standard OPD<br>3B six-benchmark average</span></div></div>
+          <div class="table-scroll" role="region" aria-label="Visual reasoning results, horizontally scrollable" tabindex="0"><table>
+            <caption>Table 4 · Accuracy (%) · Selected rows; see the paper for all baselines</caption>
+            <thead><tr><th scope="col">Model / method</th><th scope="col">Geo3K</th><th scope="col">MathVerse</th><th scope="col">MathVision</th><th scope="col">MathVista</th><th scope="col">WeMath</th><th scope="col">Hallusion</th><th scope="col">Average</th></tr></thead>
+            <tbody>
+              <tr class="reference-row"><th scope="row">Teacher · 32B</th><td>56.74</td><td>58.86</td><td>39.82</td><td>78.30</td><td>75.51</td><td>72.45</td><td>63.61</td></tr>
+              <tr><th scope="row">3B · Base</th><td>26.46</td><td>35.58</td><td>22.83</td><td>59.40</td><td>53.41</td><td>61.51</td><td>43.20</td></tr>
+              <tr><th scope="row">3B · Standard OPD</th><td>48.09</td><td>33.25</td><td>24.78</td><td>62.50</td><td>64.48</td><td>60.83</td><td>48.99</td></tr>
+              <tr class="ours"><th scope="row">3B · REOPOLD</th><td>50.58</td><td>46.40</td><td>26.39</td><td>61.50</td><td>64.60</td><td>63.62</td><td>52.18</td></tr>
+              <tr><th scope="row">7B · Base</th><td>39.77</td><td>45.72</td><td>25.05</td><td>67.80</td><td>64.77</td><td>65.62</td><td>51.46</td></tr>
+              <tr><th scope="row">7B · Standard OPD</th><td>51.75</td><td>47.71</td><td>28.79</td><td>71.27</td><td>70.06</td><td>69.51</td><td>56.51</td></tr>
+              <tr class="ours"><th scope="row">7B · REOPOLD</th><td>53.58</td><td>51.43</td><td>29.21</td><td>72.40</td><td>69.77</td><td>70.14</td><td>57.76</td></tr>
+            </tbody>
+          </table></div>
+          <p class="table-note">Means shown for readability; Table 4 includes standard deviations over five runs for reproduced results. Gains are in the overall average, not every individual benchmark.</p>
+        </div>
+
+        <div id="panel-tools" class="result-panel">
+          <div class="result-panel-heading"><div><h3>Agentic reasoning with visual tools</h3><p>Pixel-Reasoner-7B &rarr; SFT-initialized Qwen2.5-VL-3B-Instruct</p></div><div class="result-delta">+2.48 <span>points vs. standard OPD<br>four-task average</span></div></div>
+          <div class="table-scroll" role="region" aria-label="Visual tool-use results, horizontally scrollable" tabindex="0"><table>
+            <caption>Table 7 · Accuracy (%) · Active visual exploration with image-operation tools</caption>
+            <thead><tr><th scope="col">Method</th><th scope="col">Pixel</th><th scope="col">V-Star</th><th scope="col">InfoVQA</th><th scope="col">TallyQA</th><th scope="col">Average</th></tr></thead>
+            <tbody>
+              <tr class="reference-row"><th scope="row">Teacher · 7B</th><td>64.00</td><td>84.29</td><td>74.37</td><td>73.69</td><td>74.05</td></tr>
+              <tr><th scope="row">SFT student · 3B</th><td>46.00</td><td>71.20</td><td>34.88</td><td>56.91</td><td>52.25</td></tr>
+              <tr><th scope="row">+ GRPO</th><td>60.00</td><td>76.96</td><td>59.47</td><td>60.56</td><td>64.25</td></tr>
+              <tr><th scope="row">+ Standard OPD</th><td>52.00</td><td>76.55</td><td>61.09</td><td>64.34</td><td>63.27</td></tr>
+              <tr class="ours"><th scope="row">+ REOPOLD</th><td>57.00</td><td>77.43</td><td>63.12</td><td>65.43</td><td>65.75</td></tr>
+            </tbody>
+          </table></div>
+          <p class="table-note">Temperature 1.0; top-p 1.0. REOPOLD improves the four-task average over GRPO without its task-specific reward design; GRPO remains stronger on the Pixel split.</p>
+        </div>
+
+        <div class="result-footnote"><span aria-hidden="true">&#9432;</span><p><strong>Reading the efficiency numbers.</strong> The up-to-12&times; comparison uses published RL training-sequence budgets and does not control all cross-study training conditions. It is not a wall-clock or FLOP speedup. The 3.32&times; figure measures inference latency for the 7B student against the 32B teacher at comparable Pass@K. Main math tables use 300 training steps; Figure 1 also includes a 600-step REOPOLD run.</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="extensions" aria-labelledby="extensions-heading">
+      <div class="section-heading"><span class="eyebrow">04 / Beyond the main setting</span><h2 id="extensions-heading">Across vocabularies, training horizons, and teachers.</h2><p>Selective allocation also extends to cross-family transfer, privileged self-distillation, and newer vision-language models.</p></div>
+      <div class="extension-stats">
+        <article><span class="extension-tag">Cross-vocabulary · Table 3</span><h3>Recover from negative transfer</h3><p>Phi-4-Mini-Reasoning &rarr; R1-Distill-Qwen-1.5B</p><div class="comparison-values"><div><span>Base</span><strong>44.4</strong></div><div><span>Standard OPD</span><strong>35.1</strong></div><div class="value-ours"><span>REOPOLD</span><strong>47.0</strong></div></div><p class="extension-note">Average accuracy across six mathematical reasoning benchmarks, with sequence alignment across vocabularies.</p></article>
+        <article><span class="extension-tag">Self-distillation · Table 6</span><h3>Use privileged feedback more effectively</h3><p>Qwen2.5-VL-3B as both teacher and student</p><div class="comparison-values"><div><span>OPSD</span><strong>43.03</strong></div><span class="comparison-arrow" aria-hidden="true">&rarr;</span><div class="value-ours"><span>Relaxed OPSD</span><strong>45.62</strong></div></div><p class="extension-note">Four-benchmark average accuracy. Only the teacher sees privileged information such as ground-truth solutions.</p></article>
+      </div>
+      <div class="extension-figures">
+        <figure class="paper-figure"><h3>Continue improving with longer training</h3><a class="figure-link" href="assets/figures/long-training.webp" data-zoom data-caption="Figure 7. Standard OPD and REOPOLD convergence over 1,000 training steps for 3B and 7B visual reasoning students."><img src="assets/figures/long-training.webp" width="959" height="553" alt="Visual reasoning accuracy across 1,000 steps: REOPOLD continues improving while standard OPD plateaus or degrades." loading="lazy"></a><figcaption>REOPOLD maintains an advantage over 1,000 steps for both 3B and 7B visual students. Figure 7.</figcaption></figure>
+        <figure class="paper-figure"><h3>Compare with recent OPD objectives</h3><a class="figure-link" href="assets/figures/opd-comparison.webp" data-zoom data-caption="Figure 8. Qwen2.5-VL-3B comparison against standard OPD, Revisiting-OPD, and an overlap-restricted variant. The plotted axis starts at 20."><img src="assets/figures/opd-comparison.webp" width="1040" height="774" alt="Qwen2.5-VL-3B benchmark comparison: REOPOLD reaches 52.18 average versus 51.20 for Revisiting-OPD and 51.08 for overlap-restricted OPD." loading="lazy"></a><figcaption>52.18 average accuracy vs. 51.20 for Revisiting-OPD and 51.08 for overlap-restricted OPD. Axis starts at 20. Figure 8.</figcaption></figure>
+        <figure class="paper-figure"><h3>Extend to Qwen3-VL</h3><a class="figure-link" href="assets/figures/qwen3-vl.webp" data-zoom data-caption="Figure 9. Standard OPD and REOPOLD on Qwen3-VL across six visual benchmarks. Average accuracy improves from 56.35 to 58.48."><img src="assets/figures/qwen3-vl.webp" width="1033" height="774" alt="Paired benchmark results on Qwen3-VL; REOPOLD improves average accuracy from 56.35 to 58.48." loading="lazy"></a><figcaption>Average accuracy improves from 56.35 to 58.48 (+2.13 points) across six visual benchmarks. Figure 9.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="section section-tinted" id="abstract" aria-labelledby="abstract-heading">
+      <div class="container abstract-layout"><div><span class="eyebrow">The paper</span><h2 id="abstract-heading">Abstract</h2><a class="text-link" href="assets/paper/reopold.pdf" target="_blank" rel="noopener">Read the full paper <span aria-hidden="true">&#8599;</span></a></div>
+        <p>On-policy distillation (OPD) is a promising approach for transferring reasoning capabilities to capacity-constrained models, yet sampled-token OPD often suffers from entropy collapse and negative transfer. We identify uniform credit allocation as a key bottleneck: existing objectives obtain dense teacher feedback on student-generated trajectories, but apply it uniformly across sampled tokens despite highly heterogeneous token-level signals. Most tokens carry redundant near-zero credit, while rare heavy-tailed negative credits can dominate updates and prematurely suppress plausible reasoning trajectories. We introduce REOPOLD (Relaxed On-Policy Distillation), a framework that relaxes this uniform assignment by controlling where teacher feedback is applied, how strongly it affects the update, and when the allocation rule changes during training. Across diverse reasoning tasks, REOPOLD improves sampled-token OPD over recent post-training baselines with up to 12&times; higher sample efficiency, and extends to cross-vocabulary distillation, self-distillation, and test-time scaling.</p>
+      </div>
+    </section>
+
+    <section class="section container citation-section" id="citation" aria-labelledby="citation-heading">
+      <div class="citation-heading"><div><span class="eyebrow">Reference</span><h2 id="citation-heading">Citation</h2><p>If you find this work useful, please cite our paper.</p></div><div class="citation-actions"><a class="text-link" href="assets/citation.bib" download>Download .bib <span aria-hidden="true">&darr;</span></a><button class="button button-outline copy-button" type="button" id="copy-citation" hidden>Copy BibTeX</button></div></div>
+      <pre class="bibtex"><code id="bibtex">@inproceedings{ko2026reopold,
+  title = {Scaling Reasoning Efficiently via Relaxed On-Policy Distillation},
+  author = {Ko, Jongwoo and Abdali, Sara and Kim, Young Jin and Chen, Tianyi and Cameron, Pashmina},
+  booktitle = {Advances in Neural Information Processing Systems},
+  year = {2026},
+  url = {https://arxiv.org/abs/2603.11137}
+}</code></pre>
+      <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-inner"><a href="#top" class="brand"><img src="assets/favicon.svg" width="25" height="25" alt=""><span>REOPOLD</span></a><p>Relaxed On-Policy Distillation <span>·</span> NeurIPS 2026</p><a class="text-link" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a></div></footer>
+
+  <dialog id="figure-dialog" class="figure-dialog" aria-labelledby="figure-dialog-caption"><div class="dialog-toolbar"><span>Paper figure</span><button id="close-figure" type="button" aria-label="Close enlarged figure">&times;</button></div><img id="enlarged-figure" alt=""><p id="figure-dialog-caption"></p></dialog>
+</body>
+</html>
